@@ -1,0 +1,673 @@
+<html> 
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<title>GharKaChef</title>
+</head>
+<body>
+<div class="wrapper"> 
+  <div class="mobile-header">
+<a href="index.html">
+<img class="logo" src="images/gharkacheflogo.png" alt="Logo" height="70px" width="120px"; style="   animation: floatUpDown 2s ease-in-out infinite 1s; border:solid orange;">
+</a>
+<div class="head"> 
+<h1 style="
+border:solid;
+border-color: orange;
+background-color: white;
+background-image: url('images/bgbg1.gif');
+background-size: cover;
+margin-left: 500px;
+padding: 14px;
+padding-left: 70px;
+background-repeat: no-repeat;
+background-size: 70px;
+animation: floatUpDown 2s ease-in-out infinite 1s;"> GharKaChef </h1>
+</div>
+<div>
+<a href="about.html" class="about-link">
+<h1 class="login" style="font-size:25px">About Us</h1>
+</a>
+</div>
+</div>
+<div class="leftbox" style="border:solid; border-color: orange;">
+  <div class="toprow">
+<h2 class="glow" style="margin-right: 5px; margin-bottom: 100px; color: orange;">STEP:1</h2>
+
+<a href="login2.html"> <button type="button" id="selectBtn" style="border-radius: 30px; margin-bottom: 95px; border-color: orange;
+font-size: 20px; padding: 5px;   background: linear-gradient(135deg, #ff7a18, #ff9f1a);      box-shadow: 0 8px 20px rgba(255, 122, 24, 0.35);
+">Login</button>
+</a>
+</div>
+</div>
+<div class="downbox" style="border:solid; border-color: orange;"> 
+<h2 class="glow" style="margin-top: 150px; text-align: center; color: orange;">STEP:2<br>Select Ingredients</h2>
+<a href="ingredients1.html"> <button type="button" id="selectBtn" style="border-radius: 30px;  border-color: orange;
+font-size: 15px; padding: 5px;   background: linear-gradient(135deg, #ff7a18, #ff9f1a);      box-shadow: 0 8px 20px rgba(255, 122, 24, 0.35);
+">Select Ingredients</button></a>
+<p class="pg" style="font-size: 20px; text-align: center;">Just select what's in your kitchen and click view Recipes</p>
+</div>
+<div class="topbox" style="border:solid; border-color: orange;">
+<h2 class="glow" style="margin-top:150px; text-align: center; color: orange;">STEP:3<br>View Recipes</h2>
+<p class="pg" style="font-size:15px; text-align: center;">View the Recipes that matched your Ingredients and Open any recipe to see detailed ingredients and steps</p>
+</div>
+<div class="rightbox" style="border: solid; border-color: orange;">
+<h2 class="glow" style="margin-bottom: 10px; text-align: center; color: orange;">STEP:4<br>Cook and Enjoy</h2>
+</div>
+<div class="middlebox" style="border:solid; text-align: center; border-color: orange;">
+<h2 class="glow" style="margin-top: 10px; color: orange;">Description</h2>
+<p style="color: #ffffff;
+
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.7),
+    0 0 5px rgba(255, 255, 255, 0.45),
+    1px 1px 2px rgba(0,0,0,0.9),
+    -1px -1px 2px rgba(0,0,0,0.9);">Don't know what to cook today?
+<br>
+Every kitchen has days like this.
+<br>
+Few ingredients.
+<br>
+No idea what to cook.
+<br>
+GharkaChef turns “Nothing to cook” into “Let’s cook this.”<br>
+Just select what's in your kitchen, and we'll show you easy, tasty recipes you can prepare instantly.
+</p>
+<p style="color: red;
+
+    text-shadow:
+    0 0 2px rgba(255, 60, 60, 0.7),
+    0 0 5px rgba(255, 0, 0, 0.45),
+    1px 1px 2px rgba(0,0,0,0.9),
+    -1px -1px 2px rgba(0,0,0,0.9);">
+NOTE:
+<br>
+Login to get started.
+</p>
+<p style=" margin-top: 22px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(255,255,255,0.3);
+  font-size: 14px;
+  opacity: 10;
+  color: #ffffff;
+
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.7),
+    0 0 5px rgba(255, 255, 255, 0.45),
+    1px 1px 2px rgba(0,0,0,0.9),
+    -1px -1px 2px rgba(0,0,0,0.9);">Don’t forget to share your experience <br> 
+your review helps us make GharkaChef better for everyone.</p>
+<p style="text-shadow:
+    0 0 2px rgba(255, 60, 60, 0.7),
+    0 0 5px rgba(255, 0, 0, 0.45),
+    1px 1px 2px rgba(0,0,0,0.9),
+    -1px -1px 2px rgba(0,0,0,0.9);"> For the best experience open this site in Desktop/in Desktop view.</p>
+
+</div>
+</div>
+<button class="signoutbtn" onclick="logout()">Sign Out</button>
+
+<style>
+  html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body{
+height: 120vh;
+background-size: cover;
+ background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
+                  url('images/bgall.png');
+                 background-size: cover;
+      background-position: center;}
+.leftbox{
+position: absolute;
+top: 150px;
+/* specific vertical position */
+left: 10px;
+background-color: white;
+height: 100px;
+width: 200px;
+padding: 50px;
+padding-left: 300px;
+border-radius: 30px;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+transform: translateX(-150%);
+opacity: 0;
+/* TWO animations */
+animation:
+leftright 1s ease-out forwards,
+floatUpDown 2s ease-in-out infinite 1s;
+  background:
+    linear-gradient(rgba(0,0,0,0.30), rgba(0,0,0,0.30)),
+    url("images/step1.1.gif");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+.downbox{
+position: absolute;
+top: 370px;
+left: 300px;
+width: 150px;
+height: 200px;
+padding: 50px;
+padding-bottom: 250px;
+border-radius: 30px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+transform: translateX(-50%);
+transform: translatey(150%);
+opacity: 0;
+animation:
+slideInBottom 1s ease-out forwards,
+floatUpDown 2s ease-in-out infinite 1s;
+  background:
+    linear-gradient(rgba(0,0,0,0.30), rgba(0,0,0,0.30)),
+    url("images/step2.gif");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+
+}
+.rightbox{
+position: absolute;
+top: 550px;
+left: 960px;
+background-color: white;
+height:120px;
+width: 420px;
+padding: 30px;
+padding-right: 90px;
+border-radius: 30px;
+justify-content: center;
+transform: translateX(150%);
+opacity: 0;
+/* TWO animations */
+animation:
+leftright 1s ease-out forwards,
+floatUpDown 2s ease-in-out infinite 1s;
+  background:
+    linear-gradient(rgba(0,0,0,0.60), rgba(0,0,0,0.60)),
+    url("images/step4.gif");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+
+}
+.topbox{
+position: absolute;
+top:10px;
+left:960px;
+background:
+  linear-gradient(rgba(0,0,0,0.30), rgba(0,0,0,0.30)),
+  url("images/step3.gif");
+background-size: cover;
+background-position: center;
+color: #fff;
+text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+
+width: 150px;
+height: 220px;
+padding: 50px;
+padding-bottom: 250px;
+border-radius: 30px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+transform: translateX(50%);
+transform: translatey(-150%);
+opacity: 0;
+animation:
+slideInBottom 1s ease-out forwards,
+floatUpDown 2s ease-in-out infinite 1s;
+}
+.middlebox{
+position: absolute;
+top: 150px;
+left: 621px;
+background-color: white;
+height: 450px;
+width: 220px;
+padding: 20px;
+padding-bottom: 20px;
+justify-content: center;
+align-items: center;
+transform: translateY(20px) scale(0.95);
+animation:
+floatUpDown 2s ease-in-out infinite 1s,
+popupSoft 0.6s ease forwards;
+  background:
+    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45));
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+.head{
+position: absolute;
+top:1px;
+left:120px;
+margin: auto;
+}
+@keyframes bg{
+0% { background-image: url("images/bg1.jpg");}
+25% {background-image: url("images/bg2.jpg");}
+50% {background-image: url("images/bg3.jpg");}
+75% {background-image: url("images/bg4.jpg");}
+100% {background-image: url("images/bg5.jpg");}
+}
+@keyframes floatUpDown {
+0% { transform: translatey(0); }
+50% { transform: translatey(10px); }
+100% { transform: translatey(0); }
+}
+@keyframes leftright{
+to{
+transform: translateX(0);
+opacity: 1;
+}
+}
+@keyframes slideInBottom {
+to {
+transform: translatey(0);
+opacity: 1;
+}
+}
+@keyframes popupSoft {
+to {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+}
+
+.leftbox .toprow {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between STEP:1 and button */
+}
+
+.leftbox .toprow h2 {
+  margin: 0;
+}
+
+.signoutbtn {
+   position: fixed;          /* 🔑 important */
+  bottom: 20px;             /* lower side */
+  left: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ff7a18, #ff9f1a);
+    border: none;
+  border-radius: 30px;
+color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+   box-shadow: 0 8px 20px rgba(255, 122, 24, 0.35);
+  cursor: pointer;
+  transition: 0.3s ease;
+  animation: floatUpDown 2s ease-in-out infinite 1s;
+
+}
+
+.signoutbtn:hover {
+  border-color: solid;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,126,95,0.4);
+}
+.login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,126,95,0.4);
+}
+.logo:hover {
+  border-color: solid;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,126,95,0.4);
+}
+.login{
+  background: linear-gradient(135deg, #ff7a18, #ff9f1a);
+ position: fixed; 
+ margin-left: 1250px;
+color: #fff;
+   padding: 10px; 
+   animation: floatUpDown 2s ease-in-out infinite 1s;
+    border:none;
+    border-radius: 30px;
+     box-shadow: 0 8px 20px rgba(255, 122, 24, 0.35);
+}
+.mobile-header {
+  display: contents;   /* acts like it doesn't exist on desktop */
+}
+.glow {
+  color: #fff3e0;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);   /* dark glass layer */
+  backdrop-filter: blur(4px);        /* soft separation */
+  -webkit-backdrop-filter: blur(4px);
+
+  text-shadow:
+    0 0 4px rgba(255, 170, 80, 0.9),
+    0 0 10px rgba(255, 122, 24, 0.7),
+    1px 1px 3px rgba(0,0,0,1),
+    -1px -1px 3px rgba(0,0,0,1);
+}
+
+
+.pg{
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);   /* dark glass layer */
+  backdrop-filter: blur(4px);        /* soft separation */
+  -webkit-backdrop-filter: blur(4px);
+
+
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.7),
+    0 0 5px rgba(255, 255, 255, 0.45),
+    1px 1px 2px rgba(0,0,0,0.9),
+    -1px -1px 2px rgba(0,0,0,0.9);
+}
+.rightbox h2 {
+position: absolute;
+  top: 12px;
+  right: 16px;
+  margin: 0;
+  line-height: 1.1;
+}
+.wrapper {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+
+  html, body {
+    overflow-x: hidden !important;
+  }
+  .head h1 {
+    margin-left: 0 !important;
+  }
+
+  .login {
+    margin-left: 0 !important;
+  }
+    .wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .middlebox { order: 1; }   
+  .leftbox   { order: 2; }
+  .topbox    { order: 4; }
+  .downbox   { order: 3; }
+  .rightbox  { order: 5; }
+
+  .leftbox,
+  .downbox,
+  .topbox,
+  .rightbox,
+  .middlebox {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+
+    /*width: calc(100% - 40px); */
+    padding: 30px;
+    margin: 20px auto;
+    border-radius: 30px;
+     width: 100% !important;     /* instead of calc(100% - 40px) */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box;
+  }
+    .leftbox{
+      background:
+      linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+      var("images/step1.gif");
+    }
+  .downbox{
+    background:
+      linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+      var("images/step2.gif");
+  }
+  .topbox{
+    background:
+      linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+      var("images/step3.gif");
+  }
+  .rightbox {
+    background:
+      linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+      var("images/step4.gif");
+  }
+  
+  .leftbox,
+  .rightbox{
+    min-height: 200px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .downbox,
+  .topbox {
+    min-height: 350px;      /* makes them taller */
+    padding-top: 60px;      /* more breathing space */
+    padding-bottom: 60px;
+  }
+  .signoutbtn,
+  .logo,
+ .head h1,
+ .login {
+  animation: floatUpDown 2s ease-in-out infinite 1s !important;
+  }
+
+
+    body > div {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  }
+
+
+  .logo {
+    width: 18vw;
+    max-width: 90px;
+    height: auto;
+  }
+
+  .head {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto;
+    margin: 0;
+  }
+
+  .head h1 {
+    background-image: none !important;
+    margin-left: 0 !important;
+    padding: 6px 10px !important;
+    font-size: clamp(14px, 4.5vw, 20px);
+  }
+
+
+  .login {
+    position: relative !important;
+    margin: 0 !important;
+    padding: 6px 10px !important;
+    font-size: 12px !important;   /* reduce size */
+    border-radius: 14px;
+    animation: none;
+    white-space: nowrap;
+  }
+
+  .head h1 {
+    font-size: 16px !important;   /* slightly smaller heading */
+    padding: 6px 8px !important;
+  }
+
+
+
+    .signoutbtn {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 18px;
+
+    animation: none;
+    z-index: 1000;
+  }
+
+    
+  .leftbox h2,
+  .topbox h2,
+  .downbox h2,
+  .rightbox h2
+  {
+    position: absolute !important;
+    top: 8px !important;
+    right: 12px !important;
+
+    margin: 0 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+
+  .leftbox p,
+  .topbox p,
+  .middlebox p,
+  .downbox p,
+  .rightbox p {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+  }
+
+  .leftbox button {
+    font-size: 10px !important;
+    padding: 4px 10px !important;
+    position: absolute !important;
+     top: 30px !important;
+    right: 12px !important;
+
+    margin: 0 !important;
+
+  }
+  h1[style*="margin-left"] {
+    margin-left: 0 !important;
+  }
+
+  .login {
+    margin-left: 0 !important;
+    position: relative !important;
+  }
+  a,
+ a:link,
+ a:visited,
+ a:hover,
+ a:active {
+  text-decoration: none !important;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+ }
+
+  .logo,
+ .head h1,
+ .login {
+  animation: floatUpDown 2s ease-in-out infinite 1s !important;
+ }
+ .about-link:focus,
+ .about-link:active {
+  outline: none !important;
+  box-shadow: none !important;
+ }
+
+
+}
+
+</style>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBgezjCcznjGIgFajXC0MfCSX8_IRia28k",
+    authDomain: "gharkachef-14dd4.firebaseapp.com",
+    projectId: "gharkachef-14dd4",
+    storageBucket: "gharkachef-14dd4.firebasestorage.app",
+    messagingSenderId: "827981085762",
+    appId: "1:827981085762:web:bb01f4f920f1de24aa41db",
+    measurementId: "G-44P8CB6CDX"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  let currentUser = null;
+
+  // Track login state
+  onAuthStateChanged(auth, (user) => {
+  currentUser = user; // just track, don't redirect
+  });
+
+  /*onAuthStateChanged(auth, (user) => {
+     if (!user) {
+      // Not logged in → force back to login
+      window.location.replace("login2.html");
+    } else {
+      currentUser = user;
+    }
+  }); */
+
+  // Select Ingredients button
+  window.goToIngredients = function () {
+    if (currentUser) {
+      window.location.href = "ingredients1.html";
+    } else {
+      alert("Please login first");
+      window.location.href = "login2.html";
+    }
+  };
+
+  // Sign Out button
+  window.logout = function () {
+    signOut(auth)
+      .then(() => {
+        window.location.replace("login2.html");
+      })
+      .catch(err => {
+        alert("Logout failed: " + err.message);
+      });
+  };
+</script>
+
+
+</body>
+</html>

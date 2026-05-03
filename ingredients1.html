@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<title>Select Ingredients</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+
+  background:
+    linear-gradient(rgba(20,20,20,0.7), rgba(20,20,20,0.7)),
+    url("https://images.unsplash.com/photo-1495195134817-aeb325a55b65");
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+
+ h1 {
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  font-size: 36px;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  text-shadow: orange;
+}
+
+
+h2 {
+  grid-column: 1 / -1;
+  margin-top: 30px;
+  color: white;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 6px;
+}
+
+
+
+ #searchBox {
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 18px;
+  margin: 25px auto;
+  display: block;
+  font-size: 16px;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+
+  #ingredientBox {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+  }
+
+ .ingredient-card {
+  background: rgba(255,255,255,0.95);
+  padding: 14px;
+  border-radius: 18px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.ingredient-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.18);
+}
+
+
+  .ingredient-card img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+  }
+
+  .ingredient-card span {
+    display: block;
+    margin-top: 6px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .ingredient-card small {
+    font-size: 12px;
+    color: #555;
+  }
+
+  .ingredient-card input {
+    display: none;
+  }
+
+ .ingredient-card:has(input:checked) {
+  border-color: #e67e22;
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  box-shadow: 0 12px 30px rgba(230,126,34,0.35);
+}
+
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin: 30px 0;
+  flex-wrap: nowrap;   /* <- important */
+}
+
+.actions button {
+  width: 180px;        /* fixed width so they fit in one line */
+  flex: 0 0 auto;      /* prevent shrinking to next line */
+}
+
+ button {
+  padding: 14px 32px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(211,84,0,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(211,84,0,0.6);
+}
+
+
+  button.secondary {
+    background: #777;
+  }
+/* Fix main heading centering */
+.page-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.page-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 36px;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+}
+button,
+.ingredient-card:has(input:checked) {
+  filter: saturate(1.1);
+}
+
+</style>
+</head>
+
+<body>
+<div class="page-header" style="display:flex;">
+<a href="index.html">
+<img src="images/gharkacheflogo.png" alt="Logo" height="70px" width="120px"; style=" animation: floatUpDown 2s ease-in-out infinite 1s; border:solid orange; ">
+</a>
+<h1 style="margin:auto">Select Ingredients</h1>
+</div>
+<input type="text" id="searchBox" placeholder="Search ingredient...">
+<div id="ingredientBox"></div>
+
+<div class="actions">
+  <button onclick="resetSelection()" class="secondary">Reset</button>
+  <button onclick="goToRecipes()">View Recipes</button>
+</div>
+
+<script type="module">
+/* ==============================
+   INGREDIENT MASTER LIST
+============================== */
+const ingredients = [
+
+     { name: "Milk", telugu: "పాలు", image: "images/milk.jpg" },
+  { name: "Curd", telugu: "పెరుగు", image: "images/curd.jpg" },
+  { name: "Butter", telugu: "వెన్న", image: "images/butter.jpg" },
+  { name: "Ghee", telugu: "నెయ్యి", image: "images/ghee.jpg" },
+  { name: "Paneer", telugu: "పన్నీరు", image: "images/paneer.jpg" },
+
+  { name: "Buttermilk", telugu: "మజ్జిగ", image: "images/buttermilk.jpg" },
+  { name: "Fresh Cream", telugu: "తాజా క్రీమ్", image: "images/freshcream.jpg" },
+  { name: "Malai", telugu: "మలై", image: "images/malai.jpg" },
+  { name: "Condensed Milk", telugu: "కండెన్స్ చేసిన పాలు", image: "images/condensedmilk.jpg" },
+
+  { name: "Khova", telugu: "ఖోవా", image: "images/khova.jpg" },
+  { name: "Milk Powder", telugu: "పాల పొడి", image: "images/milkpowder.jpg" },
+
+  { name: "Cheese", telugu: "చీజ్", image: "images/cheese.jpg" },
+
+  { name: "Buffalo Milk", telugu: "ఎద్దు పాలు", image: "images/buffalomilk.jpg" },
+  { name: "Cow Milk", telugu: "ఆవు పాలు", image: "images/cowmilk.jpg" },
+
+
+  { name: "Rice", telugu: "బియ్యం", image: "images/rice.jpg" },
+  { name: "Basmati Rice", telugu: "బాస్మతి బియ్యం", image: "images/basmati.jpg" },
+  { name: "Brown Rice", telugu: "బ్రౌన్ బియ్యం", image: "images/brownrice.jpg" },
+  { name: "Parboiled Rice", telugu: "ఉడికించిన బియ్యం", image: "images/parboiledrice.jpg" },
+
+  { name: "Maize", telugu: "మొక్కజొన్న", image: "images/maize.jpg" },
+  { name: "Jowar", telugu: "జొన్న", image: "images/jowar.jpg" },
+  { name: "Bajra", telugu: "సజ్జ", image: "images/bajra.jpg" },
+  { name: "Ragi", telugu: "రాగి", image: "images/ragi.jpg" },
+
+  { name: "Foxtail Millet", telugu: "కొర్రలు", image: "images/foxtail.jpg" },
+  { name: "Little Millet", telugu: "సామలు", image: "images/littlemillet.jpg" },
+  { name: "Kodo Millet", telugu: "అరికెలు", image: "images/kodomillet.jpg" },
+  { name: "Barnyard Millet", telugu: "ఉదలు", image: "images/barnyard.jpg" },
+
+  
+  { name: "Toor Dal", telugu: "కందిపప్పు", image: "images/toordal.jpg" },
+  { name: "Moong Dal", telugu: "పెసర పప్పు", image: "images/moongdal.jpg" },
+  { name: "Chana Dal", telugu: "సెనగ పప్పు", image: "images/chanadal.jpg" },
+  { name: "Urad Dal", telugu: "మినపప్పు", image: "images/uraddal.jpg" },
+  { name: "Masoor Dal", telugu: "ఎర్ర కందిపప్పు", image: "images/masoordal.jpg" },
+
+  { name: "Green Gram", telugu: "పెసలు", image: "images/greengram.jpg" },
+  { name: "Black Gram", telugu: "మినప గింజలు", image: "images/blackgram.jpg" },
+  { name: "Kabuli Chana", telugu: "కబూలీ సెనగలు", image: "images/kabulichana.jpg" },
+  { name: "Desi Chana", telugu: "సెనగలు", image: "images/desichana.jpg" },
+  { name: "Rajma", telugu: "రాజ్మా", image: "images/rajma.jpg" },
+
+  { name: "Black Eyed Peas", telugu: "అలసందలు", image: "images/blackeyedpeas.jpg" },
+  { name: "Horse Gram", telugu: "ఉలవలు", image: "images/horsegram.jpg" },
+  { name: "Field Beans", telugu: "చిక్కుడు గింజలు", image: "images/fieldbeans.jpg" },
+  { name: "Dry Peas", telugu: "ఎండు బఠాణీలు", image: "images/drypeas.jpg" },
+  { name: "Soybeans", telugu: "సోయాబీన్స్", image: "images/soybeans.jpg" },
+
+  
+  { name: "Turmeric", telugu: "పసుపు", image: "images/turmeric.jpg" },
+  { name: "Red Chilli Powder", telugu: "కారం", image: "images/redchilli.jpg" },
+  { name: "Coriander Seeds", telugu: "ధనియాలు", image: "images/corianderseeds.jpg" },
+  { name: "Cumin Seeds", telugu: "జీలకర్ర", image: "images/cuminseeds.jpg" },
+  { name: "Mustard Seeds", telugu: "ఆవాలు", image: "images/mustardseeds.jpg" },
+  { name: "Fenugreek Seeds", telugu: "మెంతులు", image: "images/fenugreekseeds.jpg" },
+  { name: "Black Pepper", telugu: "నల్ల మిరియాలు", image: "images/blackpepper.jpg" },
+  { name: "Cloves", telugu: "లవంగం", image: "images/cloves.jpg" },
+  { name: "Cardamom", telugu: "ఏలకులు", image: "images/cardamom.jpg" },
+  { name: "Cinnamon", telugu: "దాల్చినచెక్క", image: "images/cinnamon.jpg" },
+  { name: "Bay Leaf", telugu: "బిర్యానీ ఆకు", image: "images/bayleaf.jpg" },
+  { name: "Asafoetida", telugu: "ఇంగువ", image: "images/asafoetida.jpg" },
+  { name: "Fennel Seeds", telugu: "సోంపు", image: "images/fennelseeds.jpg" },
+  { name: "Ginger", telugu: "అల్లం", image: "images/dryginger.jpg" },
+  { name: "Garlic", telugu: "వెల్లుల్లి", image: "images/garlic.jpg" },
+
+
+
+  { name: "Onion", telugu: "ఉల్లిపాయ", image: "images/onion.jpg" },
+  { name: "Tomato", telugu: "టమోటా", image: "images/tomato.jpg" },
+  { name: "Potato", telugu: "బంగాళాదుంప", image: "images/potato.jpg" },
+  { name: "Carrot", telugu: "క్యారెట్", image: "images/carrot.jpg" },
+  { name: "Beetroot", telugu: "బీట్‌రూట్", image: "images/beetroot.jpg" },
+
+  { name: "Cabbage", telugu: "క్యాబేజీ", image: "images/cabbage.jpg" },
+  { name: "Cauliflower", telugu: "కాలీఫ్లవర్", image: "images/cauliflower.jpg" },
+  { name: "Brinjal", telugu: "వంకాయ", image: "images/brinjal.jpg" },
+  { name: "Lady finger", telugu: "బెండకాయ", image: "images/okra.jpg" },
+  { name: "Bottle Gourd", telugu: "సొరకాయ", image: "images/bottlegourd.jpg" },
+
+  { name: "Ridge Gourd", telugu: "బీరకాయ", image: "images/ridgegourd.jpg" },
+  { name: "Snake Gourd", telugu: "పొట్లకాయ", image: "images/snakegourd.jpg" },
+  { name: "Bitter Gourd", telugu: "కాకరకాయ", image: "images/bittergourd.jpg" },
+  { name: "Pumpkin", telugu: "గుమ్మడికాయ", image: "images/pumpkin.jpg" },
+  { name: "Ash Gourd", telugu: "బూడిద గుమ్మడికాయ", image: "images/ashgourd.jpg" },
+
+  { name: "Drumstick", telugu: "మునగకాయ", image: "images/drumstick.jpg" },
+  { name: "Cluster Beans", telugu: "గోకర కాయ", image: "images/clusterbeans.jpg" },
+  { name: "French Beans", telugu: "ఫ్రెంచ్ బీన్స్", image: "images/frenchbeans.jpg" },
+  { name: "Green Peas", telugu: "పచ్చి బఠాణీలు", image: "images/greenpeas.jpg" },
+
+  { name: "Spinach", telugu: "పాలకూర", image: "images/spinach.jpg" },
+  { name: "Amaranth Leaves", telugu: "తోటకూర", image: "images/amaranth.jpg" },
+  { name: "Fenugreek Leaves", telugu: "మెంతికూర", image: "images/fenugreek.jpg" },
+  { name: "Coriander Leaves", telugu: "కొత్తిమీర", image: "images/corianderleaves.jpg" },
+  { name: "Curry Leaves", telugu: "కరివేపాకు", image: "images/curryleaves.jpg" },
+
+  { name: "Green Chilli", telugu: "పచ్చి మిరపకాయ", image: "images/greenchilli.jpg" },
+  { name: "Capsicum", telugu: "క్యాప్సికమ్", image: "images/capsicum.jpg" },
+  { name: "Cucumber", telugu: "దోసకాయ", image: "images/cucumber.jpg" },
+  { name: "Radish", telugu: "ముల్లంగి", image: "images/radish.jpg" },
+
+  { name: "Sweet Corn", telugu: "తీపి మొక్కజొన్న", image: "images/sweetcorn.jpg" },
+  { name: "Raw Banana", telugu: "అరటికాయ", image: "images/rawbanana.jpg" },
+  { name: "Taro Root", telugu: "చామగడ్డ", image: "images/taro.jpg" },
+
+ 
+
+  { name: "Mango", telugu: "మామిడి", image: "images/mango.jpg" },
+  { name: "Banana", telugu: "అరటిపండు", image: "images/banana.jpg" },
+  { name: "Apple", telugu: "ఆపిల్", image: "images/apple.jpg" },
+  { name: "Papaya", telugu: "బొప్పాయి ", image: "images/papaya.jpg" },
+  { name: "Guava", telugu: "జామ", image: "images/guava.jpg" },
+  { name: "Pomegranate", telugu: "దానిమ్మ", image: "images/pomegranate.jpg" },
+  { name: "Coconut", telugu: "కొబ్బరి", image: "images/coconut.jpg" },
+  { name: "Watermelon", telugu: "పుచ్చకాయ", image: "images/watermelon.jpg" },
+  { name: "Muskmelon", telugu: "ఖర్బుజ", image: "images/muskmelon.jpg" },
+  { name: "Orange", telugu: "నారింజ", image: "images/orange.jpg" },
+  { name: "Sweet Lime", telugu: "బత్తాయి", image: "images/sweetlime.jpg" },
+  { name: "Lemon", telugu: "నిమ్మ", image: "images/lemon.jpg" },
+  { name: "Strawberry", telugu: "స్ట్రాబెర్రీ", image: "images/strawberry.jpg" },
+  { name: "Black Grapes", telugu: "నల్ల ద్రాక్ష", image: "images/blackgrapes.jpg" },
+  { name: "Green Grapes", telugu: "పచ్చ ద్రాక్ష", image: "images/greengrapes.jpg" },
+  { name: "Jackfruit", telugu: "పనస పండు ", image: "images/jackfruit.jpg" },
+  { name: "Sapota", telugu: "సపోటా", image: "images/sapota.jpg" },
+  { name: "Pineapple", telugu: "అనాస", image: "images/pineapple.jpg" },
+  { name: "Custard Apple", telugu: "సీతాఫలం", image: "images/custardapple.jpg" },
+  { name: "Pear", telugu: "నాశపతి", image: "images/pear.jpg" },
+ 
+
+  { name: "Groundnut", telugu: "వేరుశనగ", image: "images/groundnut.jpg" },
+  { name: "Cashew", telugu: "కాజూ", image: "images/cashew.jpg" },
+  { name: "Almond", telugu: "బాదం", image: "images/almond.jpg" },
+  { name: "Walnut", telugu: "అక్రోటు", image: "images/walnut.jpg" },
+  { name: "Pistachio", telugu: "పిస్తా", image: "images/pistachio.jpg" },
+  { name: "Sesame Seeds", telugu: "ఎండు నువ్వులు", image: "images/sesameseeds.jpg" },
+  { name: "Flax Seeds", telugu: "అవిసె గింజలు", image: "images/flaxseeds.jpg" },
+  { name: "Sunflower Seeds", telugu: "సన్‌ఫ్లవర్ గింజలు", image: "images/sunflowerseeds.jpg" },
+  { name: "Melon Seeds", telugu: "పుచ్చకాయ గింజలు", image: "images/melonseeds.jpg" },
+  { name: "Lotus Seeds", telugu: "తామర గింజలు", image: "images/lotusseeds.jpg" },
+ 
+
+  { name: "Chicken", telugu: "కోడి మాంసం", image: "images/chicken.jpg" },
+  { name: "Mutton", telugu: "మేక మాంసం", image: "images/mutton.jpg" },
+  { name: "Beef", telugu: "ఎద్దు మాంసం", image: "images/beef.jpg" },
+  { name: "Pork", telugu: "పంది మాంసం", image: "images/pork.jpg" },
+
+  { name: "Fish", telugu: "చేప", image: "images/fish.jpg" },
+  { name: "Rohu Fish", telugu: "రోహు చేప", image: "images/rohu.jpg" },
+  { name: "Catla Fish", telugu: "కట్లా చేప", image: "images/catla.jpg" },
+  { name: "Pomfret", telugu: "పామ్‌ఫ్రెట్ చేప", image: "images/pomfret.jpg" },
+  { name: "Mackerel", telugu: "బంగడ చేప", image: "images/mackerel.jpg" },
+  { name: "Sardine", telugu: "కవ్వల చేప", image: "images/sardine.jpg" },
+  { name: "Tuna", telugu: "ట్యూనా చేప", image: "images/tuna.jpg" },
+
+  { name: "Prawns", telugu: "రొయ్యలు", image: "images/prawns.jpg" },
+  { name: "Crab", telugu: "పీత", image: "images/crab.jpg" },
+  { name: "Lobster", telugu: "లాబ్స్టర్", image: "images/lobster.jpg" },
+  { name: "Squid", telugu: "కలమారి", image: "images/squid.jpg" },
+
+  { name: "Eggs", telugu: "గుడ్లు", image: "images/eggs.jpg" },
+  { name: "Quail", telugu: "లవక పక్షి మాంసం", image: "images/quail.jpg" },
+  { name: "Duck", telugu: "బాతు మాంసం", image: "images/duck.jpg" },
+  { name: "Turkey", telugu: "టర్కీ మాంసం", image: "images/turkey.jpg" },
+  { name: "Goat Liver", telugu: "మేక కాలేయం", image: "images/goatliver.jpg" },
+
+ 
+  { name: "Salt", telugu: "ఉప్పు", image: "images/salt.jpg" },
+  { name: "Sugar", telugu: "చెక్కర", image: "images/sugar.jpg" },
+  { name: "Jaggery", telugu: "బెల్లం", image: "images/jaggery.jpg" },
+  { name: "Oil", telugu: "నూనె", image: "images/oil.jpg" },
+  { name: "Mustard Oil", telugu: "ఆవాల నూనె", image: "images/mustardoil.jpg" },
+  { name: "Coconut Oil", telugu: "కొబ్బరి నూనె", image: "images/coconutoil.jpg" },
+  { name: "Ghee", telugu: "నెయ్యి", image: "images/ghee.jpg" },
+  { name: "Vinegar", telugu: "వెనిగర్", image: "images/vinegar.jpg" },
+  { name: "Wheat Flour", telugu: "గోధుమ పిండి", image: "images/wheatflour.jpg" },
+  { name: "Rice Flour", telugu: "బియ్యం పిండి", image: "images/riceflour.jpg" },
+  { name: "Maida", telugu: "మైదా", image: "images/maida.jpg" },
+  { name: "Semolina", telugu: "రవ్వ", image: "images/semolina.jpg" },
+  { name: "Corn Flour", telugu: "మొక్కజొన్న పిండి", image: "images/cornflour.jpg" },
+  { name: "Yeast", telugu: "ఈస్ట్", image: "images/yeast.jpg" }
+
+];
+/* ==============================
+   9 CATEGORIES
+============================== */
+const categories = {
+   "Vegetables": [
+  "Onion",
+  "Tomato",
+  "Potato",
+  "Carrot",
+  "Beetroot",
+  "Cabbage",
+  "Cauliflower",
+  "Brinjal",
+  "Lady finger",
+  "Bottle Gourd",
+  "Ridge Gourd",
+  "Snake Gourd",
+  "Bitter Gourd",
+  "Pumpkin",
+  "Ash Gourd",
+  "Drumstick",
+  "Cluster Beans",
+  "French Beans",
+  "Green Peas",
+  "Spinach",
+  "Amaranth Leaves",
+  "Fenugreek Leaves",
+  "Coriander Leaves",
+  "Curry Leaves",
+  "Green Chilli",
+  "Capsicum",
+  "Cucumber",
+  "Radish",
+  "Sweet Corn",
+  "Raw Banana",
+  "Taro Root"
+
+  ],
+  "Dairy": [
+  "Milk",
+  "Curd",
+  "Butter",
+  "Paneer",
+  "Buttermilk",
+  "Fresh Cream",
+  "Malai",
+  "Condensed Milk",
+  "Khova",
+  "Milk Powder",
+  "Cheese",
+  "Buffalo Milk",
+  "Cow Milk"
+  ],
+
+  "Grains & Millets": [
+  "Rice",
+  "Basmati Rice",
+  "Brown Rice",
+  "Parboiled Rice",
+  "Wheat",
+  "Maize",
+  "Jowar",
+  "Bajra",
+  "Ragi",
+  "Foxtail Millet",
+  "Little Millet",
+  "Kodo Millet",
+  "Barnyard Millet"
+  ],
+
+  "Pulses & Dals": [
+  "Toor Dal",
+  "Moong Dal",
+  "Chana Dal",
+  "Urad Dal",
+  "Masoor Dal",
+  "Green Gram",
+  "Black Gram",
+  "Kabuli Chana",
+  "Desi Chana",
+  "Rajma",
+  "Black Eyed Peas",
+  "Horse Gram",
+  "Field Beans",
+  "Dry Peas",
+  "Soybeans"
+  ],
+
+  "Spices": [
+    "Turmeric","Red Chilli Powder",
+    "Coriander Seeds","Cumin Seeds","Mustard Seeds",
+    "Fenugreek Seeds","Black Pepper","Cloves","Cardamom",
+    "Cinnamon","Bay Leaf","Asafoetida","Fennel Seeds",
+    "Ginger","Garlic"
+  ],
+
+ 
+
+  "Fruits": [
+    "Mango","Banana","Apple","Papaya","Guava","Pomegranate",
+    "Coconut","Watermelon","Muskmelon","Orange","Sweet Lime",
+    "Lemon","Strawberry","Black Grapes","Green Grapes",
+    "Jackfruit","Sapota","Pineapple","Custard Apple","Pear"
+  ],
+
+  "Nuts & Seeds": [
+    "Groundnut","Cashew","Almond","Walnut","Pistachio",
+    "Sesame Seeds","Flax Seeds","Sunflower Seeds",
+    "Melon Seeds","Lotus Seeds"
+  ],
+
+  "Meat & Seafood": [
+  "Chicken",
+  "Mutton",
+  "Beef",
+  "Pork",
+  "Fish",
+  "Rohu Fish",
+  "Catla Fish",
+  "Pomfret",
+  "Mackerel",
+  "Sardine",
+  "Tuna",
+  "Prawns",
+  "Crab",
+  "Lobster",
+  "Squid",
+  "Eggs",
+  "Quail",
+  "Duck",
+  "Turkey",
+  "Goat Liver"
+  ],
+
+  "Basics & Flours": [
+    "Salt","Sugar","Jaggery","Oil","Mustard Oil",
+    "Coconut Oil","Vinegar","Wheat Flour","Rice Flour",
+    "Maida","Semolina","Tapioca","Sago","Corn Flour","Yeast"
+  ]
+
+};
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBgezjCcznjGIgFajXC0MfCSX8_IRia28k",
+    authDomain: "gharkachef-14dd4.firebaseapp.com",
+    projectId: "gharkachef-14dd4",
+    storageBucket: "gharkachef-14dd4.firebasestorage.app",
+    messagingSenderId: "827981085762",
+    appId: "1:827981085762:web:bb01f4f920f1de24aa41db"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  let box;
+  let selectedIngredients = new Set();
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login2.html";
+      return;
+    }
+    initPage();
+  });
+
+  function initPage() {
+    box = document.getElementById("ingredientBox");
+
+    document.getElementById("searchBox").addEventListener("input", e => {
+      renderByCategory(e.target.value.toLowerCase());
+    });
+
+    renderByCategory();
+  }
+
+  function renderByCategory(filterText = "") {
+    box.innerHTML = "";
+
+    for (const [category, names] of Object.entries(categories)) {
+      const items = ingredients.filter(i =>
+        names.includes(i.name) &&
+        i.name.toLowerCase().includes(filterText)
+      );
+
+      if (items.length === 0) continue;
+
+      box.innerHTML += `<h2>${category}</h2>`;
+
+      items.forEach(item => {
+        const checked = selectedIngredients.has(item.name) ? "checked" : "";
+
+        box.innerHTML += `
+          <label class="ingredient-card">
+            <input type="checkbox" value="${item.name}" ${checked}>
+            <img src="${item.image}">
+            <span>${item.name}</span>
+            <small>${item.telugu}</small>
+          </label>
+        `;
+      });
+    }
+
+    attachEvents();
+  }
+
+  function attachEvents() {
+    document.querySelectorAll("input[type=checkbox]").forEach(cb => {
+      cb.addEventListener("change", e => {
+        e.target.checked
+          ? selectedIngredients.add(e.target.value)
+          : selectedIngredients.delete(e.target.value);
+      });
+    });
+  }
+
+  function resetSelection() {
+    selectedIngredients.clear();
+    localStorage.removeItem("selectedIngredients");
+    renderByCategory();
+  }
+
+  function goToRecipes() {
+    if (selectedIngredients.size === 0) {
+      alert("Please select at least one ingredient");
+      return;
+    }
+
+    localStorage.setItem(
+  "selectedIngredients",
+  JSON.stringify([...selectedIngredients])
+);
+
+
+    window.location.href = "recipe.html";
+  }
+
+  window.resetSelection = resetSelection;
+  window.goToRecipes = goToRecipes;
+</script>
+
+</body>
+</html>

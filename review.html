@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Leave a Review</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 80px 20px 80px;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: #fff;
+
+      background:
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    header {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 10;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    .review-card {
+      max-width: 420px;
+      margin: auto;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .review-card h2 {
+      margin-top: 0;
+      color: #ffd7a1;
+      text-align: center;
+    }
+
+    .review-card input,
+    .review-card textarea {
+       width: 90%;
+  margin: 10px auto;
+  display: block;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .review-card textarea {
+      resize: none;
+      height: 120px;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 12px 0;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .stars span {
+      color: #555;
+    }
+
+    .stars span.active {
+      color: #ffb703;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 20px;
+      border: none;
+      background: #ff7a00;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .bottom-left {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+    }
+
+    .nav-btn {
+      background: #fff;
+      color: #ff6a00;
+      border: none;
+      padding: 18px 34px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    }
+    .review-card input,
+.review-card textarea {
+  text-align: center;
+}
+
+.review-card input::placeholder,
+.review-card textarea::placeholder {
+  text-align: center;
+}
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <a href="index.html"><img src="images/gharkacheflogo.png" alt="Logo">
+  </header></a>
+
+  <div class="review-card">
+    <h2>Your Review</h2>
+
+    <input type="text" id="name" placeholder="Your name" />
+    <textarea id="message" placeholder="Write your experience..."></textarea>
+
+    <div class="stars" id="stars">
+      <span data-val="1">★</span>
+      <span data-val="2">★</span>
+      <span data-val="3">★</span>
+      <span data-val="4">★</span>
+      <span data-val="5">★</span>
+    </div>
+
+    <button class="submit-btn" onclick="submitReview()">Submit Review</button>
+  </div>
+
+  <div class="bottom-left">
+    <button class="nav-btn" onclick="window.location.href='index.html'">
+      ← homepage
+    </button>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBgezjCcznjGIgFajXC0MfCSX8_IRia28k",
+    authDomain: "gharkachef-14dd4.firebaseapp.com",
+    projectId: "gharkachef-14dd4",
+    storageBucket: "gharkachef-14dd4.firebasestorage.app",
+    messagingSenderId: "827981085762",
+    appId: "1:827981085762:web:bb01f4f920f1de24aa41db"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  let rating = 0;
+  let currentUser = null;
+
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "login.html";
+    } else {
+      currentUser = user;
+    }
+  });
+
+  const stars = document.querySelectorAll("#stars span");
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      rating = Number(star.dataset.val);
+      stars.forEach(s => s.classList.remove("active"));
+      for (let i = 0; i < rating; i++) stars[i].classList.add("active");
+    });
+  });
+
+  window.submitReview = async function () {
+    const message = document.getElementById("message").value.trim();
+
+    if (!message || rating === 0) {
+      alert("Please write a review and select rating");
+      return;
+    }
+
+    try {
+      const userRef = doc(db, "users", currentUser.uid);
+
+      await updateDoc(userRef, {
+        reviewMessage: message,
+        rating: rating,
+        reviewedAt: serverTimestamp()
+      });
+
+      alert("Thank you for your review!");
+      document.getElementById("message").value = "";
+      stars.forEach(s => s.classList.remove("active"));
+      rating = 0;
+
+    } catch (e) {
+      console.error(e);
+      alert("Error saving review");
+    }
+  };
+</script>
+
+</body>
+</html>
